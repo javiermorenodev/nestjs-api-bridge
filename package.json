@@ -1,0 +1,14 @@
+{
+  "name": "nestjs-api-bridge",
+  "private": true,
+  "version": "0.0.1",
+  "workspaces": ["packages/*"],
+  "scripts": {
+    "test": "vitest run",
+    "build": "npm run build --workspaces"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "vitest": "^1.6.0"
+  }
+}
