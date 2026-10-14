@@ -1,0 +1,41 @@
+{
+  "name": "nestjs-api-bridge-vscode",
+  "displayName": "NestJS API Bridge",
+  "description": "Explora los endpoints de tu API NestJS y genera clientes Angular y Flutter.",
+  "version": "0.0.1",
+  "private": true,
+  "publisher": "javiermorenodev",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./out/extension.js",
+  "activationEvents": [
+    "workspaceContains:**/*.controller.ts"
+  ],
+  "contributes": {
+    "views": {
+      "explorer": [
+        {
+          "id": "nestjsApiBridge.endpoints",
+          "name": "NestJS Endpoints"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "watch": "node scripts/build.mjs --watch",
+    "typecheck": "tsc -p tsconfig.json",
+    "clean": "rm -rf out"
+  },
+  "dependencies": {
+    "@nestjs-api-bridge/core": "*"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.90.0",
+    "esbuild": "^0.25.0"
+  }
+}

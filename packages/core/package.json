@@ -16,6 +16,7 @@
   ],
   "scripts": {
     "build": "tsc -b && mkdir -p dist/generators/templates && cp src/generators/templates/*.hbs dist/generators/templates/",
+    "typecheck": "tsc -b",
     "clean": "rm -rf dist"
   },
   "dependencies": {
