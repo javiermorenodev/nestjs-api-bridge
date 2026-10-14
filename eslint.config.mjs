@@ -35,6 +35,12 @@ export default tseslint.config(
     },
   },
   {
+    files: ['examples/**/*.ts'],
+    rules: {
+      '@typescript-eslint/consistent-type-imports': 'off',
+    },
+  },
+  {
     files: ['**/*.js', '**/*.mjs', '**/*.cjs'],
     languageOptions: {
       globals: {
