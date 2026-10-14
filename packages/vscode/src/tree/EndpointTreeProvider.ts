@@ -43,7 +43,7 @@ export class EndpointTreeProvider
     if (element.kind === 'controller') {
       return element.controller.endpoints.map<EndpointLeafNode>((endpoint) => ({
         kind: 'endpoint',
-        controllerName: element.controller.name,
+        controller: element.controller,
         endpoint,
       }));
     }
@@ -83,7 +83,7 @@ export class EndpointTreeProvider
     item.contextValue = 'nestjsEndpoint';
     item.iconPath = endpointIcon(endpoint.httpMethod);
     item.tooltip = new vscode.MarkdownString(
-      `**${node.controllerName}.${endpoint.name}**\n\n` +
+      `**${node.controller.name}.${endpoint.name}**\n\n` +
         `- Método: \`${endpoint.httpMethod}\`\n` +
         `- Ruta: \`${endpoint.path}\`\n` +
         `- Retorna: \`${endpoint.returnType}\`\n` +

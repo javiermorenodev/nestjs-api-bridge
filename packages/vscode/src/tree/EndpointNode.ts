@@ -9,7 +9,7 @@ export interface ControllerNode {
 /** Nodo hoja del árbol que representa un endpoint de un controlador. */
 export interface EndpointLeafNode {
   readonly kind: 'endpoint';
-  readonly controllerName: string;
+  readonly controller: ControllerSpec;
   readonly endpoint: EndpointSpec;
 }
 

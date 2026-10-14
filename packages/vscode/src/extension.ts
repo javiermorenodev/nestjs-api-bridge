@@ -1,4 +1,9 @@
 import * as vscode from 'vscode';
+import { copyCurl } from './commands/copyCurl.js';
+import { copyUrl } from './commands/copyUrl.js';
+import { generateAngular } from './commands/generateAngular.js';
+import { generateFlutter } from './commands/generateFlutter.js';
+import { openHandler } from './commands/openHandler.js';
 import { EndpointTreeProvider } from './tree/EndpointTreeProvider.js';
 
 const ENDPOINTS_VIEW_ID = 'nestjsApiBridge.endpoints';
@@ -18,6 +23,14 @@ export function activate(context: vscode.ExtensionContext): void {
   watcher.onDidChange(() => provider.refresh());
   watcher.onDidDelete(() => provider.refresh());
   context.subscriptions.push(watcher);
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand('nestjsApiBridge.openHandler', openHandler),
+    vscode.commands.registerCommand('nestjsApiBridge.copyUrl', copyUrl),
+    vscode.commands.registerCommand('nestjsApiBridge.copyCurl', copyCurl),
+    vscode.commands.registerCommand('nestjsApiBridge.generateAngular', generateAngular),
+    vscode.commands.registerCommand('nestjsApiBridge.generateFlutter', generateFlutter),
+  );
 }
 
 export function deactivate(): void {}

@@ -23,6 +23,62 @@
           "name": "NestJS Endpoints"
         }
       ]
+    },
+    "commands": [
+      {
+        "command": "nestjsApiBridge.openHandler",
+        "title": "Abrir endpoint",
+        "icon": "$(go-to-file)"
+      },
+      {
+        "command": "nestjsApiBridge.copyUrl",
+        "title": "Copiar URL",
+        "icon": "$(link)"
+      },
+      {
+        "command": "nestjsApiBridge.copyCurl",
+        "title": "Copiar como cURL",
+        "icon": "$(clippy)"
+      },
+      {
+        "command": "nestjsApiBridge.generateAngular",
+        "title": "Generar servicio Angular",
+        "icon": "$(file-code)"
+      },
+      {
+        "command": "nestjsApiBridge.generateFlutter",
+        "title": "Generar cliente Flutter",
+        "icon": "$(file-code)"
+      }
+    ],
+    "menus": {
+      "view/item/context": [
+        {
+          "command": "nestjsApiBridge.openHandler",
+          "when": "view == nestjsApiBridge.endpoints && viewItem == nestjsEndpoint",
+          "group": "navigation@1"
+        },
+        {
+          "command": "nestjsApiBridge.copyUrl",
+          "when": "view == nestjsApiBridge.endpoints && viewItem == nestjsEndpoint",
+          "group": "1_copy@1"
+        },
+        {
+          "command": "nestjsApiBridge.copyCurl",
+          "when": "view == nestjsApiBridge.endpoints && viewItem == nestjsEndpoint",
+          "group": "1_copy@2"
+        },
+        {
+          "command": "nestjsApiBridge.generateAngular",
+          "when": "view == nestjsApiBridge.endpoints && viewItem == nestjsEndpoint",
+          "group": "2_generate@1"
+        },
+        {
+          "command": "nestjsApiBridge.generateFlutter",
+          "when": "view == nestjsApiBridge.endpoints && viewItem == nestjsEndpoint",
+          "group": "2_generate@2"
+        }
+      ]
     }
   },
   "scripts": {
