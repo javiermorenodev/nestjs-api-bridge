@@ -17,5 +17,9 @@
   "scripts": {
     "build": "tsc -b",
     "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "glob": "^11.1.0",
+    "ts-morph": "^28.0.0"
   }
 }

@@ -9,7 +9,7 @@ export interface EndpointSpec {
   name: string;
   /** Método HTTP asociado al endpoint. */
   httpMethod: HttpMethod;
-  /** Ruta del endpoint, relativa al `basePath` del controlador. */
+  /** Ruta completa del endpoint, combinando el `basePath` del controlador y la ruta del método. */
   path: string;
   /** Parámetros de entrada del endpoint. */
   params: ParamSpec[];

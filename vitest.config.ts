@@ -17,7 +17,7 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'html', 'lcov'],
       include: ['packages/*/src/**/*.ts'],
-      exclude: ['**/*.d.ts', '**/index.ts', '**/*.test.ts', '**/*.spec.ts'],
+      exclude: ['**/*.d.ts', '**/index.ts', '**/*.test.ts', '**/*.spec.ts', '**/__fixtures__/**'],
     },
   },
 });

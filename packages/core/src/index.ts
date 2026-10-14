@@ -8,3 +8,5 @@ export type {
   ParamDecorator,
   ParamSpec,
 } from './models/index.js';
+
+export { parseNestProject } from './parser/controllers.js';
