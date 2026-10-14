@@ -15,11 +15,12 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc -b",
+    "build": "tsc -b && mkdir -p dist/generators/templates && cp src/generators/templates/*.hbs dist/generators/templates/",
     "clean": "rm -rf dist"
   },
   "dependencies": {
     "glob": "^11.1.0",
+    "handlebars": "^4.7.10",
     "ts-morph": "^28.0.0"
   }
 }

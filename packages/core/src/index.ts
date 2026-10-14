@@ -11,3 +11,4 @@ export type {
 
 export { parseNestProject } from './parser/controllers.js';
 export { extractDto } from './parser/dtos.js';
+export { generateAngularService } from './generators/angular.js';

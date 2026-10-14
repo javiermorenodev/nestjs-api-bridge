@@ -4,6 +4,9 @@ out
 coverage
 *.vsix
 .vscode-test
+**/__snapshots__/**
+*.snap
+*.hbs
 
 package-lock.json
 pnpm-lock.yaml

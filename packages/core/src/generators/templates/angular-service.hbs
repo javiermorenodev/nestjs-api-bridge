@@ -1,0 +1,24 @@
+import { Injectable } from '@angular/core';
+import { HttpClient{{#if hasHttpParams}}, HttpParams{{/if}} } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+@Injectable({ providedIn: 'root' })
+export class {{serviceName}} {
+  private readonly baseUrl = '{{basePath}}';
+
+  constructor(private http: HttpClient) {}
+{{#each methods}}
+
+  {{name}}({{#each params}}{{name}}{{#if optional}}?{{/if}}: {{type}}{{#unless @last}}, {{/unless}}{{/each}}): Observable<{{returnType}}> {
+{{#if queryParams.length}}
+    let params = new HttpParams();
+{{#each queryParams}}
+    if ({{name}} !== undefined && {{name}} !== null) {
+      params = params.set('{{queryKey}}', String({{name}}));
+    }
+{{/each}}
+{{/if}}
+    return this.http.{{methodName}}<{{returnType}}>({{url}}{{#if bodyArg}}, {{bodyArg}}{{/if}}{{#if queryParams.length}}, { params }{{/if}});
+  }
+{{/each}}
+}
