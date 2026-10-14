@@ -10,3 +10,4 @@ export type {
 } from './models/index.js';
 
 export { parseNestProject } from './parser/controllers.js';
+export { extractDto } from './parser/dtos.js';
