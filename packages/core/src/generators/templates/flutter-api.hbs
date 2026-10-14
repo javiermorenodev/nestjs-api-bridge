@@ -1,0 +1,20 @@
+import 'package:dio/dio.dart';
+
+class {{className}} {
+  final Dio _dio;
+
+  {{className}}(this._dio);
+{{#each methods}}
+
+  Future<{{dartReturnType}}> {{name}}({{paramList}}) async {
+{{#if needsRes}}
+    final res = await {{callExpression}};
+{{else}}
+    await {{callExpression}};
+{{/if}}
+{{#if returnStatement}}
+    {{returnStatement}}
+{{/if}}
+  }
+{{/each}}
+}

@@ -1,16 +1,5 @@
-import { readFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
-import Handlebars from 'handlebars';
 import type { ControllerSpec, EndpointSpec, HttpMethod, ParamSpec } from '../models/index.js';
-
-const templatePath = fileURLToPath(new URL('./templates/angular-service.hbs', import.meta.url));
-
-let compiledTemplate: ReturnType<typeof Handlebars.compile> | undefined;
-
-function getTemplate(): ReturnType<typeof Handlebars.compile> {
-  compiledTemplate ??= Handlebars.compile(readFileSync(templatePath, 'utf8'), { noEscape: true });
-  return compiledTemplate;
-}
+import { getTemplate } from './template.js';
 
 const BODY_METHODS: ReadonlySet<HttpMethod> = new Set<HttpMethod>(['POST', 'PUT', 'PATCH']);
 
@@ -121,5 +110,5 @@ export function generateAngularService(controller: ControllerSpec): string {
     methods,
   };
 
-  return `${getTemplate()(view).trimEnd()}\n`;
+  return `${getTemplate('angular-service.hbs')(view).trimEnd()}\n`;
 }

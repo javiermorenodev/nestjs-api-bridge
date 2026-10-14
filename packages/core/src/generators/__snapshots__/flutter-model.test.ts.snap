@@ -1,0 +1,75 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`generateFlutterModel > generates an empty model when the DTO has no properties 1`] = `
+"class EmptyDto {
+  const EmptyDto();
+
+  factory EmptyDto.fromJson(Map<String, dynamic> json) {
+    return EmptyDto();
+  }
+
+  Map<String, dynamic> toJson() {
+    return {};
+  }
+}
+"
+`;
+
+exports[`generateFlutterModel > maps TypeScript types to Dart and generates fromJson/toJson 1`] = `
+"class CreateUserDto {
+  const CreateUserDto({
+    required this.name,
+    this.age,
+    required this.price,
+    required this.active,
+    required this.createdAt,
+    this.updatedAt,
+    required this.tags,
+    this.roles,
+    this.address,
+    required this.friends,
+  });
+
+  final String name;
+  final int? age;
+  final double price;
+  final bool active;
+  final DateTime createdAt;
+  final DateTime? updatedAt;
+  final List<String> tags;
+  final List<String>? roles;
+  final AddressDto? address;
+  final List<UserDto> friends;
+
+  factory CreateUserDto.fromJson(Map<String, dynamic> json) {
+    return CreateUserDto(
+      name: json['name'] as String,
+      age: json['age'] == null ? null : json['age'] as int,
+      price: json['price'] as double,
+      active: json['active'] as bool,
+      createdAt: DateTime.parse(json['createdAt'] as String),
+      updatedAt: json['updatedAt'] == null ? null : DateTime.parse(json['updatedAt'] as String),
+      tags: List<String>.from(json['tags'] as List),
+      roles: json['roles'] == null ? null : List<String>.from(json['roles'] as List),
+      address: json['address'] == null ? null : AddressDto.fromJson(json['address'] as Map<String, dynamic>),
+      friends: (json['friends'] as List).map((e) => UserDto.fromJson(e as Map<String, dynamic>)).toList(),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      if (age != null) 'age': age,
+      'price': price,
+      'active': active,
+      'createdAt': createdAt.toIso8601String(),
+      if (updatedAt != null) 'updatedAt': updatedAt.toIso8601String(),
+      'tags': tags,
+      if (roles != null) 'roles': roles,
+      if (address != null) 'address': address.toJson(),
+      'friends': friends.map((e) => e.toJson()).toList(),
+    };
+  }
+}
+"
+`;

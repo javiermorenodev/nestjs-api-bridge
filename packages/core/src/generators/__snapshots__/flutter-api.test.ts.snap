@@ -1,0 +1,61 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`generateFlutterApi > generates a Dart API client with Dio for every HTTP verb 1`] = `
+"import 'package:dio/dio.dart';
+
+class UsersApi {
+  final Dio _dio;
+
+  UsersApi(this._dio);
+
+  Future<List<String>> findAll() async {
+    final res = await _dio.get('/users');
+    return List<String>.from(res.data as List);
+  }
+
+  Future<UserDto> findOne(String id) async {
+    final res = await _dio.get('/users/$id');
+    return UserDto.fromJson(res.data as Map<String, dynamic>);
+  }
+
+  Future<List<String>> search({String? q}) async {
+    final res = await _dio.get('/users/search', queryParameters: {'q': q});
+    return List<String>.from(res.data as List);
+  }
+
+  Future<UserDto> create(CreateUserDto dto) async {
+    final res = await _dio.post('/users', data: dto.toJson());
+    return UserDto.fromJson(res.data as Map<String, dynamic>);
+  }
+
+  Future<String> replace(String id, UpdateUserDto dto) async {
+    final res = await _dio.put('/users/$id', data: dto.toJson());
+    return res.data as String;
+  }
+
+  Future<void> update(String id, UpdateUserDto dto) async {
+    await _dio.patch('/users/$id', data: dto.toJson());
+  }
+
+  Future<void> remove(String id) async {
+    await _dio.delete('/users/$id');
+  }
+}
+"
+`;
+
+exports[`generateFlutterApi > generates a client without a body for simple primitive endpoints 1`] = `
+"import 'package:dio/dio.dart';
+
+class HealthApi {
+  final Dio _dio;
+
+  HealthApi(this._dio);
+
+  Future<String> check() async {
+    final res = await _dio.get('/health');
+    return res.data as String;
+  }
+}
+"
+`;

@@ -1,0 +1,40 @@
+class {{className}} {
+{{#if properties.length}}
+  const {{className}}({
+{{#each properties}}
+    {{#unless optional}}required {{/unless}}this.{{name}},
+{{/each}}
+  });
+
+{{#each properties}}
+  final {{dartType}} {{name}};
+{{/each}}
+
+{{else}}
+  const {{className}}();
+
+{{/if}}
+  factory {{className}}.fromJson(Map<String, dynamic> json) {
+{{#if properties.length}}
+    return {{className}}(
+{{#each properties}}
+      {{name}}: {{fromJson}},
+{{/each}}
+    );
+{{else}}
+    return {{className}}();
+{{/if}}
+  }
+
+  Map<String, dynamic> toJson() {
+{{#if properties.length}}
+    return {
+{{#each properties}}
+      {{#if optional}}if ({{name}} != null) {{/if}}'{{name}}': {{toJsonValue}},
+{{/each}}
+    };
+{{else}}
+    return {};
+{{/if}}
+  }
+}
