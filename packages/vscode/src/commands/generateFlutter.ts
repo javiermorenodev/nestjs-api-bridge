@@ -1,13 +1,9 @@
 import { join } from 'node:path';
 import * as vscode from 'vscode';
-import {
-  extractDto,
-  generateFlutterApi,
-  generateFlutterModel,
-  type ControllerSpec,
-} from '@nestjs-api-bridge/core';
+import { extractDto, generateFlutterApi, generateFlutterModel } from '@nestjs-api-bridge/core';
 import type { EndpointNode } from '../tree/EndpointNode.js';
 import {
+  collectDtoNames,
   getProjectPath,
   isEndpointNode,
   pickDestinationFolder,
@@ -15,8 +11,6 @@ import {
   toKebabCase,
   writeTextFile,
 } from './util.js';
-
-const GENERIC_TYPE_WORDS = new Set(['Promise', 'Array', 'List']);
 
 /** Genera el cliente de API Flutter y sus modelos para el endpoint seleccionado. */
 export async function generateFlutter(node?: EndpointNode): Promise<void> {
@@ -50,24 +44,4 @@ export async function generateFlutter(node?: EndpointNode): Promise<void> {
   }
 
   void vscode.window.showInformationMessage(`Generados: ${generated.join(', ')}`);
-}
-
-function collectDtoNames(controller: ControllerSpec): string[] {
-  const names = new Set<string>();
-
-  for (const endpoint of controller.endpoints) {
-    if (endpoint.bodyType) {
-      names.add(endpoint.bodyType);
-    }
-    for (const name of extractReferencedTypes(endpoint.returnType)) {
-      names.add(name);
-    }
-  }
-
-  return [...names];
-}
-
-function extractReferencedTypes(typeText: string): string[] {
-  const matches = typeText.match(/[A-Z][A-Za-z0-9_]*/g) ?? [];
-  return matches.filter((name) => !GENERIC_TYPE_WORDS.has(name));
 }

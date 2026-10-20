@@ -1,16 +1,22 @@
 import { join } from 'node:path';
 import * as vscode from 'vscode';
-import { generateAngularService } from '@nestjs-api-bridge/core';
+import {
+  extractDto,
+  generateAngularModel,
+  generateAngularService,
+  toKebabCase,
+} from '@nestjs-api-bridge/core';
 import type { EndpointNode } from '../tree/EndpointNode.js';
 import {
+  collectDtoNames,
+  getProjectPath,
   isEndpointNode,
   pickDestinationFolder,
   stripControllerSuffix,
-  toKebabCase,
   writeTextFile,
 } from './util.js';
 
-/** Genera un servicio Angular para el controlador del endpoint seleccionado. */
+/** Genera un servicio Angular y sus DTOs para el controlador seleccionado. */
 export async function generateAngular(node?: EndpointNode): Promise<void> {
   if (!isEndpointNode(node)) {
     void vscode.window.showWarningMessage('Selecciona un endpoint en el árbol.');
@@ -23,14 +29,29 @@ export async function generateAngular(node?: EndpointNode): Promise<void> {
   }
 
   const { controller } = node;
-  const code = generateAngularService(controller);
-  const fileName = `${toKebabCase(stripControllerSuffix(controller.name))}.service.ts`;
-  const filePath = join(destination, fileName);
+  const baseName = toKebabCase(stripControllerSuffix(controller.name));
+  const generated: string[] = [];
 
-  await writeTextFile(filePath, code);
+  const serviceFileName = `${baseName}.service.ts`;
+  await writeTextFile(join(destination, serviceFileName), generateAngularService(controller));
+  generated.push(serviceFileName);
 
-  const action = await vscode.window.showInformationMessage(`Generado ${fileName}`, 'Abrir');
-  if (action === 'Abrir') {
-    await vscode.window.showTextDocument(vscode.Uri.file(filePath));
+  const projectPath = getProjectPath();
+  for (const dtoName of collectDtoNames(controller)) {
+    const dto = extractDto(projectPath, dtoName);
+    if (!dto) {
+      continue;
+    }
+    const modelFileName = `${toKebabCase(dto.name)}.ts`;
+    await writeTextFile(join(destination, modelFileName), generateAngularModel(dto));
+    generated.push(modelFileName);
+  }
+
+  const action = await vscode.window.showInformationMessage(
+    `Generados: ${generated.join(', ')}`,
+    'Abrir servicio',
+  );
+  if (action === 'Abrir servicio') {
+    await vscode.window.showTextDocument(vscode.Uri.file(join(destination, serviceFileName)));
   }
 }

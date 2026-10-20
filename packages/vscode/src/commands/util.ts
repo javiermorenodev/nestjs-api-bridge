@@ -1,9 +1,15 @@
 import * as vscode from 'vscode';
 import type { EndpointLeafNode } from '../tree/EndpointNode.js';
 
+import type { ControllerSpec } from '@nestjs-api-bridge/core';
+
 export const DEFAULT_BASE_URL = 'http://localhost:3000';
 
+export { toKebabCase } from '@nestjs-api-bridge/core';
+
 const PATH_PARAM_PATTERN = /:([A-Za-z0-9_]+)/g;
+
+const GENERIC_TYPE_WORDS = new Set(['Promise', 'Array', 'List', 'Observable', 'Map', 'Set']);
 
 /** Determina si el valor recibido por un comando es un nodo de endpoint. */
 export function isEndpointNode(node: unknown): node is EndpointLeafNode {
@@ -48,15 +54,6 @@ export async function writeTextFile(filePath: string, content: string): Promise<
   await vscode.workspace.fs.writeFile(vscode.Uri.file(filePath), Buffer.from(content, 'utf8'));
 }
 
-/** Convierte `UserProfile` a `user-profile`. */
-export function toKebabCase(value: string): string {
-  return value
-    .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
-    .replace(/[^A-Za-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
-    .toLowerCase();
-}
-
 /** Quita el sufijo `Controller` del nombre de una clase. */
 export function stripControllerSuffix(controllerName: string): string {
   return controllerName.replace(/Controller$/, '');
@@ -64,4 +61,29 @@ export function stripControllerSuffix(controllerName: string): string {
 
 function sampleParamValue(name: string): string {
   return name.toLowerCase() === 'id' || name.toLowerCase().endsWith('id') ? '1' : 'value';
+}
+
+export function collectDtoNames(controller: ControllerSpec): string[] {
+  const names = new Set<string>();
+
+  const collectFromType = (typeText: string): void => {
+    const matches = typeText.match(/[A-Z][A-Za-z0-9_]*/g) ?? [];
+    for (const match of matches) {
+      if (!GENERIC_TYPE_WORDS.has(match)) {
+        names.add(match);
+      }
+    }
+  };
+
+  for (const endpoint of controller.endpoints) {
+    if (endpoint.bodyType) {
+      collectFromType(endpoint.bodyType);
+    }
+    collectFromType(endpoint.returnType);
+    for (const param of endpoint.params) {
+      collectFromType(param.type);
+    }
+  }
+
+  return [...names];
 }

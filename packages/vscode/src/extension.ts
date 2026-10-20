@@ -3,6 +3,8 @@ import { copyCurl } from './commands/copyCurl.js';
 import { copyUrl } from './commands/copyUrl.js';
 import { generateAngular } from './commands/generateAngular.js';
 import { generateFlutter } from './commands/generateFlutter.js';
+import { generateReact, generateReactNative } from './commands/generateReact.js';
+import { generateVue } from './commands/generateVue.js';
 import { openHandler } from './commands/openHandler.js';
 import { EndpointTreeProvider } from './tree/EndpointTreeProvider.js';
 
@@ -30,6 +32,10 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.commands.registerCommand('nestjsApiBridge.copyCurl', copyCurl),
     vscode.commands.registerCommand('nestjsApiBridge.generateAngular', generateAngular),
     vscode.commands.registerCommand('nestjsApiBridge.generateFlutter', generateFlutter),
+    vscode.commands.registerCommand('nestjsApiBridge.generateReact', generateReact),
+    vscode.commands.registerCommand('nestjsApiBridge.generateReactNative', generateReactNative),
+    vscode.commands.registerCommand('nestjsApiBridge.generateVue', generateVue),
+    vscode.commands.registerCommand('nestjsApiBridge.refresh', () => provider.refresh()),
   );
 }
 

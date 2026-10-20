@@ -1,10 +1,31 @@
 {
   "name": "nestjs-api-bridge-vscode",
   "displayName": "NestJS API Bridge",
-  "description": "Explora los endpoints de tu API NestJS y genera clientes Angular y Flutter.",
+  "description": "Explora los endpoints de tu API NestJS y genera clientes Angular, React, React Native, Flutter y Vue.",
   "version": "0.0.1",
-  "private": true,
   "publisher": "javiermorenodev",
+  "license": "MIT",
+  "icon": "resources/icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/javiermorenodev/nestjs-api-bridge.git"
+  },
+  "homepage": "https://github.com/javiermorenodev/nestjs-api-bridge#readme",
+  "bugs": {
+    "url": "https://github.com/javiermorenodev/nestjs-api-bridge/issues"
+  },
+  "keywords": [
+    "nestjs",
+    "angular",
+    "react",
+    "react native",
+    "vue",
+    "flutter",
+    "api",
+    "client",
+    "generator",
+    "dto"
+  ],
   "engines": {
     "vscode": "^1.90.0"
   },
@@ -16,82 +37,197 @@
     "workspaceContains:**/*.controller.ts"
   ],
   "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "nestjsApiBridge",
+          "title": "NestJS API Bridge",
+          "icon": "resources/nestjs.svg"
+        }
+      ]
+    },
     "views": {
-      "explorer": [
+      "nestjsApiBridge": [
         {
           "id": "nestjsApiBridge.endpoints",
-          "name": "NestJS Endpoints"
+          "name": "Endpoints",
+          "icon": "resources/nestjs.svg",
+          "contextualTitle": "NestJS API Bridge"
         }
       ]
     },
     "commands": [
       {
         "command": "nestjsApiBridge.openHandler",
-        "title": "Abrir endpoint",
+        "title": "NestJS: Open Handler",
         "icon": "$(go-to-file)"
       },
       {
         "command": "nestjsApiBridge.copyUrl",
-        "title": "Copiar URL",
+        "title": "NestJS: Copy URL",
         "icon": "$(link)"
       },
       {
         "command": "nestjsApiBridge.copyCurl",
-        "title": "Copiar como cURL",
+        "title": "NestJS: Copy cURL",
         "icon": "$(clippy)"
       },
       {
         "command": "nestjsApiBridge.generateAngular",
-        "title": "Generar servicio Angular",
+        "title": "NestJS: Generate Angular Service",
         "icon": "$(file-code)"
       },
       {
         "command": "nestjsApiBridge.generateFlutter",
-        "title": "Generar cliente Flutter",
+        "title": "NestJS: Generate Flutter Client",
         "icon": "$(file-code)"
+      },
+      {
+        "command": "nestjsApiBridge.generateReact",
+        "title": "NestJS: Generate React Client",
+        "icon": "$(file-code)"
+      },
+      {
+        "command": "nestjsApiBridge.generateReactNative",
+        "title": "NestJS: Generate React Native Client",
+        "icon": "$(file-code)"
+      },
+      {
+        "command": "nestjsApiBridge.generateVue",
+        "title": "NestJS: Generate Vue Client",
+        "icon": "$(file-code)"
+      },
+      {
+        "command": "nestjsApiBridge.refresh",
+        "title": "NestJS: Refresh Endpoints",
+        "icon": "$(refresh)"
       }
     ],
     "menus": {
+      "view/title": [
+        {
+          "command": "nestjsApiBridge.refresh",
+          "when": "view == nestjsApiBridge.endpoints",
+          "group": "navigation"
+        }
+      ],
       "view/item/context": [
         {
           "command": "nestjsApiBridge.openHandler",
           "when": "view == nestjsApiBridge.endpoints && viewItem == nestjsEndpoint",
-          "group": "navigation@1"
+          "group": "1_open@1"
         },
         {
           "command": "nestjsApiBridge.copyUrl",
           "when": "view == nestjsApiBridge.endpoints && viewItem == nestjsEndpoint",
-          "group": "1_copy@1"
+          "group": "2_copy@1"
         },
         {
           "command": "nestjsApiBridge.copyCurl",
           "when": "view == nestjsApiBridge.endpoints && viewItem == nestjsEndpoint",
-          "group": "1_copy@2"
+          "group": "2_copy@2"
         },
         {
           "command": "nestjsApiBridge.generateAngular",
           "when": "view == nestjsApiBridge.endpoints && viewItem == nestjsEndpoint",
-          "group": "2_generate@1"
+          "group": "3_generate@1"
         },
         {
           "command": "nestjsApiBridge.generateFlutter",
           "when": "view == nestjsApiBridge.endpoints && viewItem == nestjsEndpoint",
-          "group": "2_generate@2"
+          "group": "3_generate@2"
+        },
+        {
+          "command": "nestjsApiBridge.generateReact",
+          "when": "view == nestjsApiBridge.endpoints && viewItem == nestjsEndpoint",
+          "group": "3_generate@3"
+        },
+        {
+          "command": "nestjsApiBridge.generateReactNative",
+          "when": "view == nestjsApiBridge.endpoints && viewItem == nestjsEndpoint",
+          "group": "3_generate@4"
+        },
+        {
+          "command": "nestjsApiBridge.generateVue",
+          "when": "view == nestjsApiBridge.endpoints && viewItem == nestjsEndpoint",
+          "group": "3_generate@5"
         }
       ]
+    },
+    "keybindings": [
+      {
+        "command": "nestjsApiBridge.openHandler",
+        "key": "enter",
+        "when": "focusedView == nestjsApiBridge.endpoints && viewItem == nestjsEndpoint"
+      },
+      {
+        "command": "nestjsApiBridge.copyUrl",
+        "key": "ctrl+alt+u",
+        "mac": "cmd+alt+u",
+        "when": "focusedView == nestjsApiBridge.endpoints && viewItem == nestjsEndpoint"
+      },
+      {
+        "command": "nestjsApiBridge.copyCurl",
+        "key": "ctrl+alt+c",
+        "mac": "cmd+alt+c",
+        "when": "focusedView == nestjsApiBridge.endpoints && viewItem == nestjsEndpoint"
+      },
+      {
+        "command": "nestjsApiBridge.generateAngular",
+        "key": "ctrl+alt+a",
+        "mac": "cmd+alt+a",
+        "when": "focusedView == nestjsApiBridge.endpoints && viewItem == nestjsEndpoint"
+      },
+      {
+        "command": "nestjsApiBridge.generateFlutter",
+        "key": "ctrl+alt+f",
+        "mac": "cmd+alt+f",
+        "when": "focusedView == nestjsApiBridge.endpoints && viewItem == nestjsEndpoint"
+      },
+      {
+        "command": "nestjsApiBridge.generateReact",
+        "key": "ctrl+alt+r",
+        "mac": "cmd+alt+r",
+        "when": "focusedView == nestjsApiBridge.endpoints && viewItem == nestjsEndpoint"
+      },
+      {
+        "command": "nestjsApiBridge.generateReactNative",
+        "key": "ctrl+alt+n",
+        "mac": "cmd+alt+n",
+        "when": "focusedView == nestjsApiBridge.endpoints && viewItem == nestjsEndpoint"
+      },
+      {
+        "command": "nestjsApiBridge.generateVue",
+        "key": "ctrl+alt+v",
+        "mac": "cmd+alt+v",
+        "when": "focusedView == nestjsApiBridge.endpoints && viewItem == nestjsEndpoint"
+      }
+    ],
+    "configuration": {
+      "title": "NestJS API Bridge",
+      "properties": {
+        "nestjsApiBridge.baseUrl": {
+          "type": "string",
+          "default": "http://localhost:3000",
+          "description": "URL base para Copiar URL/cURL y para el BASE_URL de los clientes fetch generados."
+        }
+      }
     }
   },
   "scripts": {
     "build": "node scripts/build.mjs",
     "watch": "node scripts/build.mjs --watch",
     "typecheck": "tsc -p tsconfig.json",
-    "clean": "rm -rf out"
+    "clean": "rm -rf out",
+    "package": "npm run build && vsce package --no-dependencies",
+    "publish": "npm run build && vsce publish --no-dependencies"
   },
   "dependencies": {
     "@nestjs-api-bridge/core": "*"
   },
   "devDependencies": {
     "@types/vscode": "^1.90.0",
+    "@vscode/vsce": "^4.0.0",
     "esbuild": "^0.25.0"
   }
 }
