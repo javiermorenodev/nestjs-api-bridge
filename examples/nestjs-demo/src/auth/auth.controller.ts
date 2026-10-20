@@ -7,10 +7,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { LoginDto } from './dto/login.dto';
-
-export interface AuthResult {
-  accessToken: string;
-}
+import { AuthResultDto } from './dto/auth-result.dto';
 
 interface StoredUser {
   id: number;
@@ -26,18 +23,18 @@ export class AuthController {
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  async login(@Body() dto: LoginDto): Promise<AuthResult> {
+  async login(@Body() dto: LoginDto): Promise<AuthResultDto> {
     const user = this.users.find((item) => item.email === dto.email);
     if (!user || user.password !== dto.password) {
       throw new UnauthorizedException('Invalid credentials');
     }
-    return { accessToken: `token-${user.id}` };
+    return { accessToken: `token-${user.id}`, user: { id: user.id, email: user.email } };
   }
 
   @Post('register')
-  async register(@Body() dto: LoginDto): Promise<AuthResult> {
+  async register(@Body() dto: LoginDto): Promise<AuthResultDto> {
     const user: StoredUser = { id: this.nextId++, ...dto };
     this.users.push(user);
-    return { accessToken: `token-${user.id}` };
+    return { accessToken: `token-${user.id}`, user: { id: user.id, email: user.email } };
   }
 }

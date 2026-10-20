@@ -1,45 +1,46 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UserResponseDto } from './dto/user-response.dto';
 
-export interface User {
-  id: number;
-  name: string;
-  email: string;
+interface StoredUser extends UserResponseDto {
   password: string;
 }
 
 @Injectable()
 export class UsersService {
-  private readonly users: User[] = [
+  private readonly users: StoredUser[] = [
     { id: 1, name: 'Ada Lovelace', email: 'ada@example.com', password: 'secret' },
     { id: 2, name: 'Alan Turing', email: 'alan@example.com', password: 'secret' },
   ];
 
   private nextId = 3;
 
-  findAll(): User[] {
-    return this.users;
+  findAll(): UserResponseDto[] {
+    return this.users.map(toResponse);
   }
 
-  findOne(id: number): User {
+  findOne(id: number): UserResponseDto {
     const user = this.users.find((item) => item.id === id);
     if (!user) {
       throw new NotFoundException(`User ${id} not found`);
     }
-    return user;
+    return toResponse(user);
   }
 
-  create(dto: CreateUserDto): User {
-    const user: User = { id: this.nextId++, ...dto };
+  create(dto: CreateUserDto): UserResponseDto {
+    const user: StoredUser = { id: this.nextId++, ...dto, password: 'secret' };
     this.users.push(user);
-    return user;
+    return toResponse(user);
   }
 
-  update(id: number, dto: UpdateUserDto): User {
-    const user = this.findOne(id);
+  update(id: number, dto: UpdateUserDto): UserResponseDto {
+    const user = this.users.find((item) => item.id === id);
+    if (!user) {
+      throw new NotFoundException(`User ${id} not found`);
+    }
     Object.assign(user, dto);
-    return user;
+    return toResponse(user);
   }
 
   remove(id: number): void {
@@ -49,4 +50,9 @@ export class UsersService {
     }
     this.users.splice(index, 1);
   }
+}
+
+function toResponse(user: StoredUser): UserResponseDto {
+  const { password: _password, ...rest } = user;
+  return rest;
 }
