@@ -1,0 +1,229 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`generateReactHooks > generates a single query hook for a minimal controller 1`] = `
+"import { useCallback, useEffect, useState } from 'react';
+import * as service from './health.service';
+
+export function useHealthCheck() {
+  type Result = Awaited<ReturnType<typeof service.check>>;
+  const [data, setData] = useState<Result | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+
+  const refetch = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const result = await service.check();
+      setData(result);
+      return result;
+    } catch (cause) {
+      const failure = cause instanceof Error ? cause : new Error(String(cause));
+      setError(failure);
+      throw failure;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    void refetch().catch(() => undefined);
+  }, [refetch]);
+
+  return { data, loading, error, refetch };
+}
+"
+`;
+
+exports[`generateReactHooks > generates query and mutation hooks 1`] = `
+"import { useCallback, useEffect, useState } from 'react';
+import * as service from './users.service';
+
+export function useUsersFindAll() {
+  type Result = Awaited<ReturnType<typeof service.findAll>>;
+  const [data, setData] = useState<Result | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+
+  const refetch = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const result = await service.findAll();
+      setData(result);
+      return result;
+    } catch (cause) {
+      const failure = cause instanceof Error ? cause : new Error(String(cause));
+      setError(failure);
+      throw failure;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    void refetch().catch(() => undefined);
+  }, [refetch]);
+
+  return { data, loading, error, refetch };
+}
+
+export function useUsersFindOne(id: string) {
+  type Result = Awaited<ReturnType<typeof service.findOne>>;
+  const [data, setData] = useState<Result | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+
+  const refetch = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const result = await service.findOne(id);
+      setData(result);
+      return result;
+    } catch (cause) {
+      const failure = cause instanceof Error ? cause : new Error(String(cause));
+      setError(failure);
+      throw failure;
+    } finally {
+      setLoading(false);
+    }
+  }, [id]);
+
+  useEffect(() => {
+    void refetch().catch(() => undefined);
+  }, [refetch]);
+
+  return { data, loading, error, refetch };
+}
+
+export function useUsersSearch(q?: string) {
+  type Result = Awaited<ReturnType<typeof service.search>>;
+  const [data, setData] = useState<Result | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+
+  const refetch = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const result = await service.search(q);
+      setData(result);
+      return result;
+    } catch (cause) {
+      const failure = cause instanceof Error ? cause : new Error(String(cause));
+      setError(failure);
+      throw failure;
+    } finally {
+      setLoading(false);
+    }
+  }, [q]);
+
+  useEffect(() => {
+    void refetch().catch(() => undefined);
+  }, [refetch]);
+
+  return { data, loading, error, refetch };
+}
+
+export function useUsersCreate() {
+  type Result = Awaited<ReturnType<typeof service.create>>;
+  const [data, setData] = useState<Result | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+
+  const mutate = useCallback(async (...args: Parameters<typeof service.create>) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const result = await service.create(...args);
+      setData(result);
+      return result;
+    } catch (cause) {
+      const failure = cause instanceof Error ? cause : new Error(String(cause));
+      setError(failure);
+      throw failure;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  return { mutate, data, loading, error };
+}
+
+export function useUsersReplace() {
+  type Result = Awaited<ReturnType<typeof service.replace>>;
+  const [data, setData] = useState<Result | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+
+  const mutate = useCallback(async (...args: Parameters<typeof service.replace>) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const result = await service.replace(...args);
+      setData(result);
+      return result;
+    } catch (cause) {
+      const failure = cause instanceof Error ? cause : new Error(String(cause));
+      setError(failure);
+      throw failure;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  return { mutate, data, loading, error };
+}
+
+export function useUsersUpdate() {
+  type Result = Awaited<ReturnType<typeof service.update>>;
+  const [data, setData] = useState<Result | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+
+  const mutate = useCallback(async (...args: Parameters<typeof service.update>) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const result = await service.update(...args);
+      setData(result);
+      return result;
+    } catch (cause) {
+      const failure = cause instanceof Error ? cause : new Error(String(cause));
+      setError(failure);
+      throw failure;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  return { mutate, data, loading, error };
+}
+
+export function useUsersRemove() {
+  type Result = Awaited<ReturnType<typeof service.remove>>;
+  const [data, setData] = useState<Result | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+
+  const mutate = useCallback(async (...args: Parameters<typeof service.remove>) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const result = await service.remove(...args);
+      setData(result);
+      return result;
+    } catch (cause) {
+      const failure = cause instanceof Error ? cause : new Error(String(cause));
+      setError(failure);
+      throw failure;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  return { mutate, data, loading, error };
+}
+"
+`;

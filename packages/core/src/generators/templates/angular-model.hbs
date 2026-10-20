@@ -1,0 +1,5 @@
+export interface {{name}} {
+{{#each properties}}
+readonly {{name}}{{#if isOptional}}?{{/if}}: {{{type}}};
+{{/each}}
+}

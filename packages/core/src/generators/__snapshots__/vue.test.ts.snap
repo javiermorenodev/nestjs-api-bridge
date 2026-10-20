@@ -1,0 +1,38 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`generateVueComposable > generates a composable exposing every endpoint 1`] = `
+"import { ref } from 'vue';
+import * as service from './users.service';
+
+export function useUsers() {
+  const loading = ref(false);
+  const error = ref<Error | null>(null);
+
+  async function run<T>(action: () => Promise<T>): Promise<T> {
+    loading.value = true;
+    error.value = null;
+    try {
+      return await action();
+    } catch (cause) {
+      const failure = cause instanceof Error ? cause : new Error(String(cause));
+      error.value = failure;
+      throw failure;
+    } finally {
+      loading.value = false;
+    }
+  }
+
+  return {
+    loading,
+    error,
+    findAll: (...args: Parameters<typeof service.findAll>) => run(() => service.findAll(...args)),
+    findOne: (...args: Parameters<typeof service.findOne>) => run(() => service.findOne(...args)),
+    search: (...args: Parameters<typeof service.search>) => run(() => service.search(...args)),
+    create: (...args: Parameters<typeof service.create>) => run(() => service.create(...args)),
+    replace: (...args: Parameters<typeof service.replace>) => run(() => service.replace(...args)),
+    update: (...args: Parameters<typeof service.update>) => run(() => service.update(...args)),
+    remove: (...args: Parameters<typeof service.remove>) => run(() => service.remove(...args)),
+  };
+}
+"
+`;

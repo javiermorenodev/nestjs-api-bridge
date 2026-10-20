@@ -1,6 +1,17 @@
 import type { ControllerSpec, EndpointSpec, ParamSpec } from '../models/index.js';
+import { toKebabCase } from '../utils/case.js';
 import { buildFromJsonExpression, tsTypeToDart, unwrapPromise } from './dart-types.js';
 import { getTemplate } from './template.js';
+
+const GENERIC_TYPE_WORDS: ReadonlySet<string> = new Set([
+  'Promise',
+  'Array',
+  'Observable',
+  'List',
+  'Map',
+  'Set',
+  'Date',
+]);
 
 interface FlutterMethodView {
   name: string;
@@ -13,6 +24,7 @@ interface FlutterMethodView {
 
 interface FlutterApiView {
   className: string;
+  modelImports: string[];
   methods: FlutterMethodView[];
 }
 
@@ -74,6 +86,31 @@ function toMethodView(endpoint: EndpointSpec): FlutterMethodView {
   };
 }
 
+function collectModelImports(controller: ControllerSpec): string[] {
+  const names = new Set<string>();
+
+  const collectFromType = (typeText: string): void => {
+    const matches = typeText.match(/[A-Z][A-Za-z0-9_]*/g) ?? [];
+    for (const match of matches) {
+      if (!GENERIC_TYPE_WORDS.has(match)) {
+        names.add(match);
+      }
+    }
+  };
+
+  for (const endpoint of controller.endpoints) {
+    if (endpoint.bodyType) {
+      collectFromType(endpoint.bodyType);
+    }
+    collectFromType(endpoint.returnType);
+    for (const param of endpoint.params) {
+      collectFromType(param.type);
+    }
+  }
+
+  return [...names].map((name) => `${toKebabCase(name)}.dart`);
+}
+
 /**
  * Genera un cliente de API en Dart (usando Dio) a partir de la especificación de un controlador.
  *
@@ -83,6 +120,7 @@ function toMethodView(endpoint: EndpointSpec): FlutterMethodView {
 export function generateFlutterApi(controller: ControllerSpec): string {
   const view: FlutterApiView = {
     className: toApiName(controller.name),
+    modelImports: collectModelImports(controller),
     methods: controller.endpoints.map(toMethodView),
   };
 

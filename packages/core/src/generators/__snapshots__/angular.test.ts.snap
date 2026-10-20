@@ -4,6 +4,9 @@ exports[`generateAngularService > generates a complete Angular service with all 
 "import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import type { UserDto } from './user-dto';
+import type { CreateUserDto } from './create-user-dto';
+import type { UpdateUserDto } from './update-user-dto';
 
 @Injectable({ providedIn: 'root' })
 export class UsersService {

@@ -107,6 +107,9 @@ describe('generateAngularService', () => {
     expect(output).toContain("private readonly baseUrl = '/users';");
     expect(output).toContain('constructor(private http: HttpClient) {}');
     expect(output).toContain('import { Observable } from');
+    expect(output).toContain("import type { UserDto } from './user-dto';");
+    expect(output).toContain("import type { CreateUserDto } from './create-user-dto';");
+    expect(output).toContain("import type { UpdateUserDto } from './update-user-dto';");
     expect(output).toContain('return this.http.get<string[]>(`${this.baseUrl}`);');
     expect(output).toContain('return this.http.get<UserDto>(`${this.baseUrl}/${id}`);');
     expect(output).toContain('return this.http.post<UserDto>(`${this.baseUrl}`, dto);');

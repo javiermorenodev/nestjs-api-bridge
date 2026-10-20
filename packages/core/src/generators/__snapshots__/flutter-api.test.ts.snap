@@ -2,6 +2,9 @@
 
 exports[`generateFlutterApi > generates a Dart API client with Dio for every HTTP verb 1`] = `
 "import 'package:dio/dio.dart';
+import 'user-dto.dart';
+import 'create-user-dto.dart';
+import 'update-user-dto.dart';
 
 class UsersApi {
   final Dio _dio;

@@ -104,6 +104,9 @@ describe('generateFlutterApi', () => {
     const output = generateFlutterApi(usersController);
 
     expect(output).toContain("import 'package:dio/dio.dart';");
+    expect(output).toContain("import 'user-dto.dart';");
+    expect(output).toContain("import 'create-user-dto.dart';");
+    expect(output).toContain("import 'update-user-dto.dart';");
     expect(output).toContain('class UsersApi {');
     expect(output).toContain('final Dio _dio;');
     expect(output).toContain('UsersApi(this._dio);');
@@ -130,6 +133,8 @@ describe('generateFlutterApi', () => {
   it('generates a client without a body for simple primitive endpoints', () => {
     const output = generateFlutterApi(healthController);
 
+    expect(output).toContain("import 'package:dio/dio.dart';");
+    expect(output.match(/^import /gm)).toHaveLength(1);
     expect(output).toContain('class HealthApi {');
     expect(output).toContain('Future<String> check() async {');
     expect(output).toContain("final res = await _dio.get('/health');");

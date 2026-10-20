@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient{{#if hasHttpParams}}, HttpParams{{/if}} } from '@angular/common/http';
 import { Observable } from 'rxjs';
+{{#each dtoImports}}
+import type { {{name}} } from './{{fileName}}';
+{{/each}}
 
 @Injectable({ providedIn: 'root' })
 export class {{serviceName}} {

@@ -1,4 +1,7 @@
 import 'package:dio/dio.dart';
+{{#each modelImports}}
+import '{{this}}';
+{{/each}}
 
 class {{className}} {
   final Dio _dio;

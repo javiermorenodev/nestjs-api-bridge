@@ -1,0 +1,61 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`generateFetchService > generates a typed fetch service with model imports 1`] = `
+"import type { UserDto } from './user-dto.model';
+import type { CreateUserDto } from './create-user-dto.model';
+import type { UpdateUserDto } from './update-user-dto.model';
+
+const BASE_URL = '';
+
+async function request<T>(path: string, init?: RequestInit): Promise<T> {
+  const response = await fetch(\`\${BASE_URL}\${path}\`, {
+    ...init,
+    headers: { 'Content-Type': 'application/json', ...(init?.headers ?? {}) },
+  });
+
+  if (!response.ok) {
+    throw new Error(\`Request failed: \${response.status} \${response.statusText}\`);
+  }
+
+  if (response.status === 204) {
+    return undefined as T;
+  }
+
+  return (await response.json()) as T;
+}
+
+export async function findAll(): Promise<string[]> {
+  return request<string[]>(\`/users\`, { method: 'GET' });
+}
+
+export async function findOne(id: string): Promise<UserDto> {
+  return request<UserDto>(\`/users/\${id}\`, { method: 'GET' });
+}
+
+export async function search(q?: string): Promise<string[]> {
+  const query = new URLSearchParams();
+  if (q !== undefined && q !== null) {
+    query.set('q', String(q));
+  }
+  const queryString = query.toString();
+
+  return request<string[]>(\`/users/search\${queryString ? \`?\${queryString}\` : ''}\`, { method: 'GET' });
+}
+
+export async function create(dto: CreateUserDto): Promise<UserDto> {
+  return request<UserDto>(\`/users\`, { method: 'POST', body: JSON.stringify(dto) });
+}
+
+export async function replace(id: string, dto: UpdateUserDto): Promise<string> {
+  return request<string>(\`/users/\${id}\`, { method: 'PUT', body: JSON.stringify(dto) });
+}
+
+export async function update(id: string, dto: UpdateUserDto): Promise<void> {
+  return request<void>(\`/users/\${id}\`, { method: 'PATCH', body: JSON.stringify(dto) });
+}
+
+export async function remove(id: string): Promise<void> {
+  return request<void>(\`/users/\${id}\`, { method: 'DELETE' });
+}
+"
+`;

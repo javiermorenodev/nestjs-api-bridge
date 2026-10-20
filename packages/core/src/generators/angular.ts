@@ -1,7 +1,18 @@
 import type { ControllerSpec, EndpointSpec, HttpMethod, ParamSpec } from '../models/index.js';
 import { getTemplate } from './template.js';
 
+import { toKebabCase } from '../utils/case.js';
+
 const BODY_METHODS: ReadonlySet<HttpMethod> = new Set<HttpMethod>(['POST', 'PUT', 'PATCH']);
+
+const GENERIC_TYPE_WORDS: ReadonlySet<string> = new Set([
+  'Promise',
+  'Array',
+  'Observable',
+  'List',
+  'Map',
+  'Set',
+]);
 
 interface ParamView {
   name: string;
@@ -28,6 +39,7 @@ interface ServiceView {
   basePath: string;
   hasHttpParams: boolean;
   methods: MethodView[];
+  dtoImports: DtoImportView[];
 }
 
 function toServiceName(controllerName: string): string {
@@ -108,7 +120,41 @@ export function generateAngularService(controller: ControllerSpec): string {
     basePath: controller.basePath,
     hasHttpParams: methods.some((method) => method.queryParams.length > 0),
     methods,
+    dtoImports: collectDtoImports(controller),
   };
 
   return `${getTemplate('angular-service.hbs')(view).trimEnd()}\n`;
+}
+
+interface DtoImportView {
+  name: string;
+  fileName: string;
+}
+
+function collectDtoImports(controller: ControllerSpec): DtoImportView[] {
+  const names = new Set<string>();
+
+  const collectFromType = (typeText: string): void => {
+    const matches = typeText.match(/[A-Z][A-Za-z0-9_]*/g) ?? [];
+    for (const match of matches) {
+      if (!GENERIC_TYPE_WORDS.has(match)) {
+        names.add(match);
+      }
+    }
+  };
+
+  for (const endpoint of controller.endpoints) {
+    if (endpoint.bodyType) {
+      collectFromType(endpoint.bodyType);
+    }
+    collectFromType(endpoint.returnType);
+    for (const param of endpoint.params) {
+      collectFromType(param.type);
+    }
+  }
+
+  return [...names].map((name) => ({
+    name,
+    fileName: toKebabCase(name),
+  }));
 }
