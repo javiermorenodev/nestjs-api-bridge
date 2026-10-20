@@ -3,7 +3,7 @@
 [![CI](https://github.com/javiermorenodev/nestjs-api-bridge/actions/workflows/ci.yml/badge.svg)](https://github.com/javiermorenodev/nestjs-api-bridge/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 
-Genera clientes Angular y Flutter leyendo tu código NestJS de forma estática, sin levantar el servidor.
+Genera clientes Angular, React, React Native, Vue y Flutter leyendo tu código NestJS de forma estática, sin levantar el servidor.
 
 ## El problema
 
@@ -19,6 +19,7 @@ NestJS API Bridge analiza el proyecto con `ts-morph`, construye un modelo de la 
 
 - Árbol de endpoints en el explorador, agrupados por controlador.
 - Servicios Angular (`@Injectable`) con un método por endpoint.
+- Cliente `fetch` de TypeScript con hooks de React, hooks de React Native y composables de Vue.
 - Cliente de API Flutter y modelos Dart a partir de tus DTOs.
 - Comandos de contexto: abrir el handler, copiar la URL, copiar un `cURL` y generar el cliente.
 
@@ -40,6 +41,20 @@ code --install-extension javiermorenodev.nestjs-api-bridge-vscode
 
 Abre un workspace con `*.controller.ts` y la vista **NestJS Endpoints** aparece en el explorador.
 
+Para probar la extensión en local sin publicar:
+
+```bash
+npm install
+npm run build
+```
+
+Abre el repositorio en VS Code y pulsa `F5` (configuración **Run Extension**). También puedes empaquetarla e instalarla:
+
+```bash
+npm run package -w nestjs-api-bridge-vscode
+code --install-extension packages/vscode/nestjs-api-bridge-vscode-0.0.1.vsix
+```
+
 ### CLI (próximamente)
 
 ```bash
@@ -50,12 +65,9 @@ npx @nestjs-api-bridge/cli generate --framework angular --out ./src/app/api
 
 Ajustes disponibles en `settings.json` (o en la UI de ajustes de VS Code):
 
-| Opción                            | Tipo   | Por defecto             | Descripción                                                                  |
-| --------------------------------- | ------ | ----------------------- | ---------------------------------------------------------------------------- |
-| `nestjsApiBridge.baseUrl`         | string | `http://localhost:3000` | URL base para los comandos **Copiar URL** y **Copiar como cURL**.            |
-| `nestjsApiBridge.modelsPath`      | string | `../models`             | Ruta relativa desde el servicio generado hasta la carpeta de modelos/DTOs.   |
-| `nestjsApiBridge.outputDir`       | string | `""`                    | Carpeta destino de los archivos generados. Vacío pregunta en cada ejecución. |
-| `nestjsApiBridge.controllersGlob` | string | `**/*.controller.ts`    | Patrón glob para localizar los controladores.                                |
+| Opción                    | Tipo   | Por defecto             | Descripción                                                                     |
+| ------------------------- | ------ | ----------------------- | ------------------------------------------------------------------------------- |
+| `nestjsApiBridge.baseUrl` | string | `http://localhost:3000` | URL base para **Copiar URL/cURL** y para el `BASE_URL` de los clientes `fetch`. |
 
 ## Cómo funciona
 
@@ -90,7 +102,7 @@ Ajustes disponibles en `settings.json` (o en la UI de ajustes de VS Code):
 ## Stack técnico
 
 - **ts-morph** — parser estático sobre la API del compilador de TypeScript.
-- **Handlebars** — plantillas de los generadores Angular y Flutter.
+- **Handlebars** — plantillas de los generadores Angular, TypeScript y Flutter.
 - **VS Code Extension API** — árbol de endpoints, comandos y watcher de archivos.
 - **esbuild** — bundle de la extensión; `tsc` compila el core.
 - **Vitest** — tests unitarios y de snapshots.
@@ -104,14 +116,15 @@ Ajustes disponibles en `settings.json` (o en la UI de ajustes de VS Code):
 - [x] Extracción de DTOs con validadores de `class-validator`.
 - [x] Generador de servicio Angular.
 - [x] Generador de API Flutter + modelos Dart.
+- [x] Generadores React, React Native y Vue (servicio `fetch` + hooks/composable).
 - [x] Extensión VS Code: árbol de endpoints y comandos (abrir, copiar URL/cURL, generar).
 
 ### v0.2
 
 - [ ] Publicación en el VS Code Marketplace.
 - [ ] CLI `nestjs-api-bridge generate`.
-- [ ] Imports automáticos de DTOs en el servicio Angular.
-- [ ] Keybindings y comando de refresco de la vista.
+- [x] Imports automáticos de DTOs en el servicio Angular.
+- [x] Keybindings y comando de refresco de la vista.
 - [ ] Soporte de autenticación (Bearer) en los clientes generados.
 
 ### v0.3

@@ -7,3 +7,7 @@ out/
 coverage/
 *.log
 .vscode-test/
+.vscode/*
+!.vscode/launch.json
+!.vscode/tasks.json
+docs/*.mov
